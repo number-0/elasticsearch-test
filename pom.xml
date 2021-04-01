@@ -16,6 +16,7 @@
   </parent>
   <modules>
     <module>lucene-test</module>
+    <module>elasticsearch-example</module>
   </modules>
 
 </project>
