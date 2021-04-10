@@ -6,6 +6,7 @@ import com.alibaba.fastjson.annotation.JSONField;
 public class JobDetail {
     @JSONField(serialize = false)
     private long id;
+
     private String area;
     private String exp;
     private String edu;

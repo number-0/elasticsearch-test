@@ -58,6 +58,11 @@ public class JobFullTextServiceImpl implements JobFullTextService {
     }
 
     @Override
+    public void close() throws IOException {
+        restHighLevelClient.close();
+    }
+
+    @Override
     public void add(JobDetail jobDetail) throws IOException {
         //1.	构建IndexRequest对象，用来描述ES发起请求的数据。
         IndexRequest indexRequest = new IndexRequest(JOB_IDX);
@@ -83,7 +88,7 @@ public class JobFullTextServiceImpl implements JobFullTextService {
         // 2.	使用RestHighLevelClient.get发送GetRequest请求，并获取到ES服务器的响应。
         GetResponse getResponse = restHighLevelClient.get(getRequest, RequestOptions.DEFAULT);
 
-        // 3.	将ES响应的数据转换为JSON字符串
+        // 3.	将ES响应的数据转换为JSON字符串，返回的数据中没有id
         String json = getResponse.getSourceAsString();
 
         // 4.	并使用FastJSON将JSON字符串转换为JobDetail类对象
@@ -126,6 +131,12 @@ public class JobFullTextServiceImpl implements JobFullTextService {
 
     }
 
+    /**
+     * 关键字检索
+     * @param keywords
+     * @return
+     * @throws IOException
+     */
     @Override
     public List<JobDetail> searchByKeywords(String keywords) throws IOException {
         // 1.构建SearchRequest检索请求
@@ -136,6 +147,8 @@ public class JobFullTextServiceImpl implements JobFullTextService {
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
 
         // 3.使用QueryBuilders.multiMatchQuery构建一个查询条件（搜索title、jd），并配置到SearchSourceBuilder
+        //title、jd都是字段名称
+        //在title、jd中查询包含keywords内容的数据
         MultiMatchQueryBuilder multiMatchQueryBuilder = QueryBuilders.multiMatchQuery(keywords, "title", "jd");
 
         // 将查询条件设置到查询请求构建器中
@@ -240,7 +253,7 @@ public class JobFullTextServiceImpl implements JobFullTextService {
             // 将查询条件设置到查询请求构建器中
             searchSourceBuilder.query(multiMatchQueryBuilder);
 
-            // 设置高亮
+            // 设置高亮：搜索的关键字在结果中会高亮
             HighlightBuilder highlightBuilder = new HighlightBuilder();
             highlightBuilder.field("title");
             highlightBuilder.field("jd");
@@ -337,8 +350,5 @@ public class JobFullTextServiceImpl implements JobFullTextService {
         return hashMap;
     }
 
-    @Override
-    public void close() throws IOException {
-        restHighLevelClient.close();
-    }
+
 }

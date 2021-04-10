@@ -51,6 +51,25 @@
     </dependency>
   </dependencies>
 
+<!--  <repositories>&lt;!&ndash; 代码库 &ndash;&gt;-->
+<!--    <repository>-->
+<!--      <id>aliyun</id>-->
+<!--      <url>http://maven.aliyun.com/nexus/content/groups/public/</url>-->
+<!--      <releases>-->
+<!--        <enabled>true</enabled>-->
+<!--      </releases>-->
+<!--      <snapshots>-->
+<!--        <enabled>false</enabled>-->
+<!--        <updatePolicy>never</updatePolicy>-->
+<!--      </snapshots>-->
+<!--    </repository>-->
+
+<!--    <repository>-->
+<!--      <id>elastic.co</id>-->
+<!--      <url>https://artifacts.elastic.co/maven</url>-->
+<!--    </repository>-->
+<!--  </repositories>-->
+
   <build>
     <plugins>
       <plugin>
